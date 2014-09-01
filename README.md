@@ -12,6 +12,6 @@ This is an early-stage Python app built on Twilio meant to serve as a proof of c
 - Prompt the service provider to connect with the user when they answer.
 - Merge the callers when the prompt is accepted.
 
-The origina idea was from a conversation between @alanjosephwilliams and @lippytak, when discussing their ongoing research. The ideas of @daguar greatly influence how we percieve the potentail value of the service.
+The origina idea was from a conversation between @alanjosephwilliams and @lippytak, when discussing their ongoing research. The ideas of @daguar greatly influence how we percieve the potentail value of the service. Further discussion of the idea can be found in the [ideas repo](https://github.com/codeforamerica/health-project-ideas/issues/38).
 
-This is a project of CFA's Health SpecOps Team.
+This is a project of CFA's Health SpecOps Team. 
