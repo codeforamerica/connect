@@ -5,7 +5,7 @@ A text message interface to initiate phone calls, have your place held while in 
 
 ### What it is
 
-This is an early-state Python app built on Twilio meant to serve as a proof of concept. Currently, using you can
+This is an early-state Python app built on Twilio meant to serve as a proof of concept. Currently, using this app you can:
 
 - Initiate a call to a specified number
 - Have Twiilio wait while you are on hold waiting for service
