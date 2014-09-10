@@ -14,10 +14,11 @@ account = os.environ['TWILIO_SID']
 token = os.environ['TWILIO_AUTH']
 twilio_number = os.environ['TWILIO_NUM']
 client = TwilioRestClient(account, token)
-destination_phone_number = '+18177136264'
-button_sequence_for_human = 'www123ww'
+destination_phone_number = '+14155581001'
+button_sequence_for_human = 'www1ww1ww2'
 message_to_user = "I'm on it! I'll call you when I reach a human."
 ready_to_connect_message = "Okay! I have a human on the other line. I'm going to call you right now."
+hangup_message = "Hmmm, it looks they hung up on you. How rude. Reply CONNECT to try again."
 user_number = ''
 
 @app.route("/", methods = ['GET', 'POST'])
@@ -42,14 +43,13 @@ def call_answered():
   resp = twilio.twiml.Response()
   with resp.gather(numDigits=1, action="/handle-key", method="POST") as g:
     g.pause(length = 3)
-    g.say("I have a client on the other line. Press 1 and I'll connect you.", loop=0)
+    g.play("https://s3-us-west-1.amazonaws.com/cfa-health-connect/leo.wav", loop=0)
   return str(resp)
 
 @app.route("/handle-key", methods = ['GET', 'POST'])
 def handle_key():
   digit_pressed = request.values.get('Digits', None)
-  resp = twilio.twiml.Response()
-  if digit_pressed == "1":
+  if digit_pressed:
     message = client.messages.create(to = user_number,
                                     from_ = twilio_number,
                                     body = ready_to_connect_message)
@@ -57,11 +57,11 @@ def handle_key():
     resp.dial(user_number)
     return str(resp)
 
-  # If the caller pressed anything but 1, redirect them to the homepage.
+  # If the answer-er doesn't press anything, apologize to the client
   else:
-    resp.say("Don't be difficult. Just press 1.")
-    resp.redirect(url_for('handle_key', _external=True))
-    return str(resp)
+    message = client.messages.create(to = user_number,
+                                    from_ = twilio_number,
+                                    body = hangup_message)
 
 if __name__ == "__main__":
   app.run()
