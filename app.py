@@ -30,6 +30,8 @@ def index():
     call = client.calls.create(to = destination_phone_number,
                               from_ = twilio_number,
                               send_digits = button_sequence_for_human,
+                              fallback_url = url_for('call_error', _external=True),
+                              status_callback = url_for('call_over', _external=True),
                               url = url_for('call_answered', _external=True))
     
     message = client.messages.create(to = user_number,
@@ -62,6 +64,22 @@ def handle_key():
     message = client.messages.create(to = user_number,
                                     from_ = twilio_number,
                                     body = hangup_message)
+
+@app.route("/call-error", methods = ['GET', 'POST'])
+def call_error():
+  resp = twilio.twiml.Response()
+  message = client.messages.create(to = user_number,
+                                    from_ = twilio_number,
+                                    body = hangup_message)
+  return str(resp)
+
+@app.route("/call-over", methods = ['GET', 'POST'])
+def call_over():
+  resp = twilio.twiml.Response()
+  message = client.messages.create(to = user_number,
+                                    from_ = twilio_number,
+                                    body = hangup_message)
+  return str(resp)
 
 if __name__ == "__main__":
   app.run()
