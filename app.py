@@ -18,7 +18,7 @@ destination_phone_number = '+14155581001'
 button_sequence_for_human = 'www1ww1ww2'
 message_to_user = "I'm on it! I'll call you when I reach a human."
 ready_to_connect_message = "Okay! I have a human on the other line. I'm going to call you right now."
-hangup_message = "Hmmm, it looks they hung up on you. How rude. Reply CONNECT to try again."
+hangup_message = "Hmmm, it looks they hung up on you (or maybe they're closed right now?). How rude. Reply CONNECT to try again."
 user_number = ''
 
 @app.route("/", methods = ['GET', 'POST'])
