@@ -15,5 +15,11 @@ describe Connect do
       url = parsed_response.xpath('//Response//Play').children[0].text
       expect(url).to eq('https://s3-us-west-1.amazonaws.com/cfa-health-connect/initial_call_response.wav')
     end
+
+    it 'then hangs up' do
+      parsed_response = Nokogiri.parse(last_response.body)
+      last_xml_element = parsed_response.xpath('//Response').children.last.name
+      expect(last_xml_element).to eq('Hangup')
+    end
   end
 end
