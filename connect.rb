@@ -1,6 +1,6 @@
 require 'sinatra'
 
 class Connect < Sinatra::Base
-  get '/' do
+  post '/' do
   end
 end
