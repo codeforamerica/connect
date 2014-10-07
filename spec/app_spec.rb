@@ -46,7 +46,8 @@ describe Connect do
         to: phone_number_to_connect,
         from: twilio_phone_number,
         send_digits: button_sequence,
-        url: "http://example.org/hold?user_phone_number=#{caller_phone_number}"
+        url: "http://example.org/hold?user_phone_number=#{caller_phone_number}",
+        method: 'GET'
       )
     end
   end

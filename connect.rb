@@ -18,7 +18,8 @@ class Connect < Sinatra::Base
       to: ENV['PHONE_NUMBER_TO_CONNECT'],
       from: ENV['TWILIO_PHONE_NUMBER'],
       send_digits: ENV['BUTTON_SEQUENCE_TO_REACH_HOLD'],
-      url: "#{server_base_url}/hold?user_phone_number=#{params['From']}"
+      url: "#{server_base_url}/hold?user_phone_number=#{params['From']}",
+      method: 'GET'
     )
     response = Twilio::TwiML::Response.new do |r|
       r.Play 'https://s3.amazonaws.com/connect-cfa/initial_call_voice_file_v1.mp3'
