@@ -28,5 +28,16 @@ class Connect < Sinatra::Base
   end
 
   get '/hold' do
+    phone_number_without_spaces = params[:user_phone_number].gsub(" ","")
+    response = Twilio::TwiML::Response.new do |r|
+      r.Gather(numDigits: 1, action: "/connections/#{phone_number_without_spaces}/connect", method: 'POST') do |g|
+        g.Pause(length: 3)
+        g.Play("https://s3-us-west-1.amazonaws.com/cfa-health-connect/leo.wav", loop: '0')
+      end
+    end
+    response.text
+  end
+
+  post '/connections/:phone_number/connect' do
   end
 end

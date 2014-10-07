@@ -52,5 +52,21 @@ describe Connect do
   end
 
   describe 'GET /hold' do
+    let(:caller_phone_number) { '+12223334444'}
+
+    it 'returns TwiML to play voice on loop and call user when representative presses a number' do
+      get "/hold?user_phone_number=#{caller_phone_number}"
+      clean_phone_number = caller_phone_number.gsub("+","")
+      expected_twiml = Twilio::TwiML::Response.new do |r|
+        r.Gather(numDigits: 1, action: "/connections/#{clean_phone_number}/connect", method: 'POST') do |g|
+          g.Pause(length: 3)
+          g.Play("https://s3-us-west-1.amazonaws.com/cfa-health-connect/leo.wav", loop: 0)
+        end
+      end.text
+      expect(last_response.body).to eq(expected_twiml)
+    end
+  end
+
+  describe 'connecting rep with user (POST /connections/:phone_number/connect)' do
   end
 end
