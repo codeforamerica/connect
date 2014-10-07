@@ -21,7 +21,7 @@ class Connect < Sinatra::Base
       url: "#{server_base_url}/hold?user_phone_number=#{params['From']}"
     )
     response = Twilio::TwiML::Response.new do |r|
-      r.Play 'https://s3-us-west-1.amazonaws.com/cfa-health-connect/initial_call_response.wav'
+      r.Play 'https://s3.amazonaws.com/connect-cfa/initial_call_voice_file_v1.mp3'
       r.Hangup
     end
     response.text
@@ -39,5 +39,10 @@ class Connect < Sinatra::Base
   end
 
   post '/connections/:phone_number/connect' do
+    phone_number_with_plus_sign = '+' + params[:phone_number]
+    response = Twilio::TwiML::Response.new do |r|
+      r.Dial phone_number_with_plus_sign
+    end
+    response.text
   end
 end

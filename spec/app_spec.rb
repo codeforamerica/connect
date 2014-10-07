@@ -32,7 +32,7 @@ describe Connect do
     it 'plays a voice file to the user' do
       parsed_response = Nokogiri.parse(last_response.body)
       url = parsed_response.xpath('//Response//Play').children[0].text
-      expect(url).to eq('https://s3-us-west-1.amazonaws.com/cfa-health-connect/initial_call_response.wav')
+      expect(url).to eq('https://s3.amazonaws.com/connect-cfa/initial_call_voice_file_v1.mp3')
     end
 
     it 'then hangs up' do
@@ -68,5 +68,23 @@ describe Connect do
   end
 
   describe 'connecting rep with user (POST /connections/:phone_number/connect)' do
+    context 'if the representative presses a button' do
+      let(:caller_phone_number_digits_only) { '12223334444'}
+
+      before do
+        post "/connections/#{caller_phone_number_digits_only}/connect", { 'Digits' => '1' }
+      end
+
+      it 'dials the user' do
+        expected_twiml = Twilio::TwiML::Response.new do |r|
+          r.Dial("+#{caller_phone_number_digits_only}")
+        end.text
+        expect(last_response.body).to eq(expected_twiml)
+      end
+    end
+
+    context 'if the representative hangs up' do
+      # TBD
+    end
   end
 end
