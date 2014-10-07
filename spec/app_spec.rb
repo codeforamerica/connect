@@ -26,7 +26,7 @@ describe Connect do
       expect(last_xml_element).to eq('Hangup')
     end
 
-    it 'initiates a call to the outbound number' do
+    it 'initiates a call with proper arguments' do
       expect(fake_calls_object).to have_received(:create).with({to: '+14159998888'})
     end
   end

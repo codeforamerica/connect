@@ -25,7 +25,7 @@ require File.expand_path('../../connect', __FILE__)
 RSpec.configure do |config|
   config.include RackSpecHelpers
   config.before do
-    ENV['CONNECT_PHONE_NUMBER'] = '+14159998888'
+    ENV['PHONE_NUMBER_TO_CONNECT'] = '+14159998888'
     self.app = Connect
   end
 # The settings below are suggested to provide a good initial experience
