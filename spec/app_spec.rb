@@ -4,8 +4,12 @@ describe Connect do
   describe 'initial call' do
     let(:fake_calls_object) { double("Twilio Client Calls object", :create => 'call created!') }
     let(:fake_twilio_client) { double("Twilio::REST::Client", :calls => fake_calls_object) }
+    let(:phone_number_to_connect) { '+14159998888' }
+    let(:twilio_phone_number) { '+15101112222' }
 
     before do
+      ENV['PHONE_NUMBER_TO_CONNECT'] = phone_number_to_connect
+      ENV['TWILIO_PHONE_NUMBER'] = twilio_phone_number
       allow(Twilio::REST::Client).to receive(:new).and_return(fake_twilio_client)
       post '/', { 'From' => '+12223334444' }
     end
@@ -27,7 +31,9 @@ describe Connect do
     end
 
     it 'initiates a call with proper arguments' do
-      expect(fake_calls_object).to have_received(:create).with({to: '+14159998888'})
+      expect(fake_calls_object).to have_received(:create).with(
+        to: phone_number_to_connect
+      )
     end
   end
 end
