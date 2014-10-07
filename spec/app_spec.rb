@@ -5,6 +5,7 @@ describe Connect do
     let(:fake_calls_object) { double("Twilio Client Calls object", :create => 'call created!') }
     let(:fake_twilio_client) { double("Twilio::REST::Client", :calls => fake_calls_object) }
     let(:phone_number_to_connect) { '+14159998888' }
+    let(:caller_phone_number) { '+12223334444'}
     let(:twilio_phone_number) { '+15101112222' }
     let(:button_sequence) { 'www1ww1ww2' }
     let(:twilio_sid) { 'faketwiliosid' }
@@ -17,7 +18,7 @@ describe Connect do
       ENV['TWILIO_SID'] = twilio_sid
       ENV['TWILIO_AUTH'] = twilio_auth
       allow(Twilio::REST::Client).to receive(:new).and_return(fake_twilio_client)
-      post '/call/initiate', { 'From' => '+12223334444' }
+      post '/call/initiate', { 'From' => caller_phone_number }
     end
 
     it 'responds' do
@@ -45,8 +46,11 @@ describe Connect do
         to: phone_number_to_connect,
         from: twilio_phone_number,
         send_digits: button_sequence,
-        url: 'http://example.org/hold'
+        url: "http://example.org/hold?user_phone_number=#{caller_phone_number}"
       )
     end
+  end
+
+  describe 'GET /hold' do
   end
 end
