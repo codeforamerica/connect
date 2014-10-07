@@ -30,4 +30,19 @@ In the Ruby version (v2) of the app, deploy to Heroku and set the following envi
 - `TWILIO_AUTH`: your Twilio auth token
 - `TWILIO_PHONE_NUMBER`: your Twilio-purchased phone number
 
+Then, in the Twilio dashboard, configure the "voice URL" for your phone number to "https://my-app-name.herokuapp.com/call/initiate"
+
+### Local Development
+
+For the Ruby version of the app, to get started, clone the repo and cd into the directory.
+
+You will need to use Ruby 2.1.1 for this app. To install, we recommend using RVM (`rvm install 2.1.1`).
+
+Then, install dependencies:
+
+`bundle install`
+
+And run tests simply with:
+
+`rspec`
 

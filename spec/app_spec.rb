@@ -17,7 +17,7 @@ describe Connect do
       ENV['TWILIO_SID'] = twilio_sid
       ENV['TWILIO_AUTH'] = twilio_auth
       allow(Twilio::REST::Client).to receive(:new).and_return(fake_twilio_client)
-      post '/', { 'From' => '+12223334444' }
+      post '/call/initiate', { 'From' => '+12223334444' }
     end
 
     it 'responds' do
@@ -44,7 +44,8 @@ describe Connect do
       expect(fake_calls_object).to have_received(:create).with(
         to: phone_number_to_connect,
         from: twilio_phone_number,
-        send_digits: button_sequence
+        send_digits: button_sequence,
+        url: 'http://example.org/hold'
       )
     end
   end
