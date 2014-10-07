@@ -18,7 +18,6 @@
 require 'rack/test'
 require 'sinatra'
 require 'pry'
-require 'dotenv'
 require 'nokogiri'
 require File.expand_path('../rack_spec_helpers', __FILE__)
 require File.expand_path('../../connect', __FILE__)
@@ -26,7 +25,7 @@ require File.expand_path('../../connect', __FILE__)
 RSpec.configure do |config|
   config.include RackSpecHelpers
   config.before do
-    Dotenv.load
+    ENV['CONNECT_PHONE_NUMBER'] = '+14159998888'
     self.app = Connect
   end
 # The settings below are suggested to provide a good initial experience

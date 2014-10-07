@@ -51,7 +51,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  dotenv
   foreman
   nokogiri
   pry

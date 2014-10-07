@@ -9,6 +9,5 @@ group :test, :development do
   gem 'rack-test'
   gem 'pry'
   gem 'nokogiri'
-  gem 'dotenv'
   gem 'foreman'
 end
