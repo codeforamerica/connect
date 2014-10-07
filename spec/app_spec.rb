@@ -2,8 +2,12 @@ require 'spec_helper'
 
 describe Connect do
   describe 'initial call' do
+    let(:fake_calls_object) { double("Twilio Client Calls object", :create => 'call created!') }
+    let(:fake_twilio_client) { double("Twilio::REST::Client", :calls => fake_calls_object) }
+
     before do
-      post '/'
+      allow(Twilio::REST::Client).to receive(:new).and_return(fake_twilio_client)
+      post '/', { 'From' => '+12223334444' }
     end
 
     it 'responds' do
@@ -20,6 +24,10 @@ describe Connect do
       parsed_response = Nokogiri.parse(last_response.body)
       last_xml_element = parsed_response.xpath('//Response').children.last.name
       expect(last_xml_element).to eq('Hangup')
+    end
+
+    it 'initiates a call to the outbound number' do
+      expect(fake_calls_object).to have_received(:create).with({to: '+14159998888'})
     end
   end
 end
