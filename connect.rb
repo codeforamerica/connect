@@ -25,7 +25,7 @@ class Connect < Sinatra::Base
       method: 'GET'
     )
     response = Twilio::TwiML::Response.new do |r|
-      r.Play 'https://s3.amazonaws.com/connect-cfa/initial_call_voice_file_v1.mp3'
+      r.Play 'https://s3.amazonaws.com/connect-cfa/initial_call_voice_file_v2.mp3'
       r.Hangup
     end
     response.text

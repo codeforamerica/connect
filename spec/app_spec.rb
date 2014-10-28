@@ -32,7 +32,7 @@ describe Connect do
     it 'plays a voice file to the user' do
       parsed_response = Nokogiri.parse(last_response.body)
       url = parsed_response.xpath('//Response//Play').children[0].text
-      expect(url).to eq('https://s3.amazonaws.com/connect-cfa/initial_call_voice_file_v1.mp3')
+      expect(url).to eq('https://s3.amazonaws.com/connect-cfa/initial_call_voice_file_v2.mp3')
     end
 
     it 'then hangs up' do
