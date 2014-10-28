@@ -124,7 +124,7 @@ describe Connect do
       get "/end?caller_number=#{caller_number_value}"
       expected_twiml = Twilio::TwiML::Response.new do |r|
         r.Gather(numDigits: 1, action: "/hangup-report/#{caller_number_value}", method: 'POST') do |g|
-          g.Play("https://s3-us-west-1.amazonaws.com/cfa-health-connect/did_they_hang_up.mp3")
+          g.Play("https://s3.amazonaws.com/connect-cfa/did_they_hang_up.mp3")
         end
       end.text
       expect(last_response.body).to eq(expected_twiml)
