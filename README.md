@@ -1,6 +1,8 @@
 Connect
 =======
 
+[![Build Status](https://travis-ci.org/codeforamerica/connect.svg)](https://travis-ci.org/codeforamerica/connect)
+
 A digital service to improve the experience of calling social service offices — call a number to have your place held, instead of waiting on hold. When a human is on the other line, you get a call back!
 
 ### What it is
