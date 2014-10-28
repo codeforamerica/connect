@@ -46,6 +46,8 @@ describe Connect do
         to: phone_number_to_connect,
         from: twilio_phone_number,
         send_digits: button_sequence,
+        status_callback: 'http://example.org/connections/12223334444/hangup',
+        status_callback_method: 'POST',
         url: "http://example.org/hold?user_phone_number=#{caller_phone_number}",
         method: 'GET'
       )
@@ -83,9 +85,59 @@ describe Connect do
         expect(last_response.body).to eq(expected_twiml)
       end
     end
+  end
 
-    context 'if the representative hangs up' do
-      # TBD
+  describe 'completion of call' do
+    let(:fake_calls_object) { double("Twilio Client Calls object", :create => 'call created!') }
+    let(:fake_twilio_client) { double("Twilio::REST::Client", :calls => fake_calls_object) }
+    let(:twilio_phone_number) { '+15101112222' }
+    let(:twilio_sid) { 'faketwiliosid' }
+    let(:twilio_auth) { 'faketwilioauth' }
+    let(:caller_phone_number_digits_only) { '12223334444'}
+
+    before do
+      ENV['TWILIO_PHONE_NUMBER'] = twilio_phone_number
+      ENV['TWILIO_SID'] = twilio_sid
+      ENV['TWILIO_AUTH'] = twilio_auth
+      allow(Twilio::REST::Client).to receive(:new).and_return(fake_twilio_client)
+      post "/connections/#{caller_phone_number_digits_only}/hangup"
+    end
+
+    it 'instantiates a Twilio client with the correct credentials' do
+      expect(Twilio::REST::Client).to have_received(:new).with(twilio_sid, twilio_auth)
+    end
+
+    it 'calls the user' do
+      number_with_plus_sign = "+" + caller_phone_number_digits_only
+      expect(fake_calls_object).to have_received(:create).with(
+        to: number_with_plus_sign,
+        from: twilio_phone_number,
+        url: "http://example.org/end?caller_number=#{caller_phone_number_digits_only}",
+        method: 'GET'
+      )
+    end
+  end
+
+  describe '/end' do
+    it 'provides twiml' do
+      caller_number_value = '12223334444'
+      get "/end?caller_number=#{caller_number_value}"
+      expected_twiml = Twilio::TwiML::Response.new do |r|
+        r.Gather(numDigits: 1, action: "/hangup-report/#{caller_number_value}", method: 'POST') do |g|
+          g.Play("https://s3-us-west-1.amazonaws.com/cfa-health-connect/did_they_hang_up.mp3")
+        end
+      end.text
+      expect(last_response.body).to eq(expected_twiml)
+    end
+  end
+
+  describe 'hangup report' do
+    it 'hangs up' do
+      post '/hangup-report/12223334444', { 'Digits' => 1 }
+      expected_twiml = Twilio::TwiML::Response.new do |r|
+        r.Hangup
+      end.text
+      expect(last_response.body).to eq(expected_twiml)
     end
   end
 end
