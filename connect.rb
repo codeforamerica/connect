@@ -36,7 +36,7 @@ class Connect < Sinatra::Base
     response = Twilio::TwiML::Response.new do |r|
       r.Gather(numDigits: 1, action: "/connections/#{phone_number_without_spaces}/connect", method: 'POST') do |g|
         g.Pause(length: 3)
-        g.Play("https://s3-us-west-1.amazonaws.com/cfa-health-connect/leo.wav", loop: '0')
+        g.Play("https://s3-us-west-1.amazonaws.com/cfa-health-connect/coveredca.mp3", loop: '0')
       end
     end
     response.text
