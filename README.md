@@ -7,7 +7,7 @@ A digital service to improve the experience of calling social service offices â€
 
 ### What it is
 
-This is a [beta-stage digital service](https://www.gov.uk/service-manual/phases) built using Twilio.
+This is a [alpha-stage digital service](https://www.gov.uk/service-manual/phases) built using Twilio.
 
 The current flow works like this:
 
