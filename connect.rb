@@ -6,6 +6,7 @@ class Connect < Sinatra::Base
   use Rack::SSL unless settings.environment == :development or settings.environment == :test
 
   if settings.environment == :production
+    check_for_env_vars!
     set :url_scheme, 'https'
   else
     set :url_scheme, 'http'
@@ -25,7 +26,7 @@ class Connect < Sinatra::Base
       method: 'GET'
     )
     response = Twilio::TwiML::Response.new do |r|
-      r.Play 'https://s3.amazonaws.com/connect-cfa/initial_call_voice_file_v2.mp3'
+      r.Play 'https://s3.amazonaws.com/connect-cfa/initial_call_voice_file_v3_100715.mp3'
       r.Hangup
     end
     response.text
@@ -36,7 +37,7 @@ class Connect < Sinatra::Base
     response = Twilio::TwiML::Response.new do |r|
       r.Gather(numDigits: 1, action: "/connections/#{phone_number_without_spaces}/connect", method: 'POST') do |g|
         g.Pause(length: 3)
-        g.Play("https://s3-us-west-1.amazonaws.com/cfa-health-connect/leo.wav", loop: '0')
+        g.Play(ENV['LOOP_AUDIO_URL'], loop: '0')
       end
     end
     response.text
@@ -79,5 +80,22 @@ class Connect < Sinatra::Base
       r.Hangup
     end
     response.text
+  end
+
+  def self.check_for_env_vars!
+    needed_env_vars = [
+      'PHONE_NUMBER_TO_CONNECT',
+      'BUTTON_SEQUENCE_TO_REACH_HOLD',
+      'TWILIO_SID',
+      'TWILIO_AUTH',
+      'TWILIO_PHONE_NUMBER',
+      'LOOP_AUDIO_URL'
+    ]
+    missing_env_vars = needed_env_vars.select do |var|
+      ENV.has_key?(var) == false
+    end
+    if missing_env_vars.empty? == false
+      raise "Missing env vars: #{missing_env_vars.join(' ')}"
+    end
   end
 end

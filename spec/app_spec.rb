@@ -10,6 +10,7 @@ describe Connect do
     let(:button_sequence) { 'www1ww1ww2' }
     let(:twilio_sid) { 'faketwiliosid' }
     let(:twilio_auth) { 'faketwilioauth' }
+    let(:loop_audio_url) { 'https://www.example.com/fake-loop-audio-url.mp3' }
 
     before do
       ENV['PHONE_NUMBER_TO_CONNECT'] = phone_number_to_connect
@@ -17,6 +18,7 @@ describe Connect do
       ENV['BUTTON_SEQUENCE_TO_REACH_HOLD'] = button_sequence
       ENV['TWILIO_SID'] = twilio_sid
       ENV['TWILIO_AUTH'] = twilio_auth
+      ENV['LOOP_AUDIO_URL'] = loop_audio_url
       allow(Twilio::REST::Client).to receive(:new).and_return(fake_twilio_client)
       post '/call/initiate', { 'From' => caller_phone_number }
     end
@@ -32,7 +34,7 @@ describe Connect do
     it 'plays a voice file to the user' do
       parsed_response = Nokogiri.parse(last_response.body)
       url = parsed_response.xpath('//Response//Play').children[0].text
-      expect(url).to eq('https://s3.amazonaws.com/connect-cfa/initial_call_voice_file_v2.mp3')
+      expect(url).to eq('https://s3.amazonaws.com/connect-cfa/initial_call_voice_file_v3_100715.mp3')
     end
 
     it 'then hangs up' do
@@ -63,7 +65,7 @@ describe Connect do
       expected_twiml = Twilio::TwiML::Response.new do |r|
         r.Gather(numDigits: 1, action: "/connections/#{clean_phone_number}/connect", method: 'POST') do |g|
           g.Pause(length: 3)
-          g.Play("https://s3-us-west-1.amazonaws.com/cfa-health-connect/leo.wav", loop: 0)
+          g.Play('https://www.example.com/fake-loop-audio-url.mp3', loop: 0)
         end
       end.text
       expect(last_response.body).to eq(expected_twiml)
