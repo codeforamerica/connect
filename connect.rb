@@ -18,7 +18,6 @@ class Connect < Sinatra::Base
     client.calls.create(
       to: ENV['PHONE_NUMBER_TO_CONNECT'],
       from: ENV['TWILIO_PHONE_NUMBER'],
-      send_digits: ENV['BUTTON_SEQUENCE_TO_REACH_HOLD'],
       status_callback: "#{server_base_url}/connections/#{phone_number_digits_only}/hangup",
       status_callback_method: 'POST',
       url: "#{server_base_url}/hold?user_phone_number=#{params['From']}",
@@ -34,6 +33,7 @@ class Connect < Sinatra::Base
   get '/hold' do
     phone_number_without_spaces = params[:user_phone_number].gsub(" ","")
     response = Twilio::TwiML::Response.new do |r|
+      r.Play(digits: ENV['BUTTON_SEQUENCE_TO_REACH_HOLD'])
       r.Gather(numDigits: 1, action: "/connections/#{phone_number_without_spaces}/connect", method: 'POST') do |g|
         g.Pause(length: 3)
         g.Play("https://s3-us-west-1.amazonaws.com/cfa-health-connect/leo.wav", loop: '0')

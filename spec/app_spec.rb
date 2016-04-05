@@ -45,7 +45,6 @@ describe Connect do
       expect(fake_calls_object).to have_received(:create).with(
         to: phone_number_to_connect,
         from: twilio_phone_number,
-        send_digits: button_sequence,
         status_callback: 'http://example.org/connections/12223334444/hangup',
         status_callback_method: 'POST',
         url: "http://example.org/hold?user_phone_number=#{caller_phone_number}",
@@ -61,6 +60,7 @@ describe Connect do
       get "/hold?user_phone_number=#{caller_phone_number}"
       clean_phone_number = caller_phone_number.gsub("+","")
       expected_twiml = Twilio::TwiML::Response.new do |r|
+        r.Play(digits: 'www1ww1ww2')
         r.Gather(numDigits: 1, action: "/connections/#{clean_phone_number}/connect", method: 'POST') do |g|
           g.Pause(length: 3)
           g.Play("https://s3-us-west-1.amazonaws.com/cfa-health-connect/leo.wav", loop: 0)
