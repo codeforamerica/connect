@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
-ruby '2.5.1'
+ruby_version = File.read(File.join(File.dirname(__FILE__), '.ruby-version')).strip
+ruby ruby_version
 
 gem 'sinatra'
 gem 'twilio-ruby'
