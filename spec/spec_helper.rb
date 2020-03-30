@@ -17,7 +17,6 @@
 
 require 'rack/test'
 require 'sinatra'
-require 'pry'
 require 'nokogiri'
 require File.expand_path('../rack_spec_helpers', __FILE__)
 require File.expand_path('../../connect', __FILE__)

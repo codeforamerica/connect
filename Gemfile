@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.1.6'
+ruby '2.5.1'
 
 gem 'sinatra'
 gem 'twilio-ruby'
